@@ -7,8 +7,6 @@
 var app = require('../app');
 var debug = require('debug')('exam:server');
 var http = require('http');
-var createHandler = require('github-webhook-handler');
-var handler = createHandler({ path: '/incoming', secret: 'oureux' }) 
 
 /**
  * Get port from environment and store in Express.
@@ -31,35 +29,6 @@ server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
-handler.on('error', function (err) {
-  console.error('Error:', err.message)
-})
-
-handler.on('push', function (event) {
-  console.log('Received a push event for %s to %s',
-    event.payload.repository.name,
-    event.payload.ref)
-})
-
-/*
-handler.on('issues', function (event) {
-  console.log('Received an issue event for %s action=%s: #%d %s',
-    event.payload.repository.name,
-    event.payload.action,
-    event.payload.issue.number,
-    event.payload.issue.title);
-  run_cmd('sh', ['~/bin/deploy.sh'], function(text){console.log(text)});
-})*/
-
-function run_cmd(cmd, args, callback) {
-  var spawn = require('child_process').spawn;
-  var child = spawn(cmd, args);
-  var resp = "";
- 
-  child.stdout.on('data', function(buffer) { resp += buffer.toString(); });
-  child.stdout.on('end', function() { callback (resp) });
-}
- 
 
 /**
  * Normalize a port into a number, string, or false.
